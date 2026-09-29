@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0"><dict>
+  <key>Label</key><string>org.aprswatch.monitor</string>
+  <key>ProgramArguments</key><array>
+    <string>/ABSOLUTE/PATH/python3</string>
+    <string>-m</string><string>aprs_watch</string><string>run</string>
+    <string>--config</string><string>/Users/YOU/Library/Application Support/APRSWatch/config.json</string>
+  </array>
+  <key>WorkingDirectory</key><string>/ABSOLUTE/PATH/aprs-watch</string>
+  <key>RunAtLoad</key><true/>
+  <key>KeepAlive</key><true/>
+  <key>ThrottleInterval</key><integer>15</integer>
+  <key>ExitTimeOut</key><integer>45</integer>
+</dict></plist>

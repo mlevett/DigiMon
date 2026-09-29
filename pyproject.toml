@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "digimon-aprs"
+version = "1.0.0"
+description = "Receive-only APRS digipeater monitor with desktop and service modes"
+requires-python = ">=3.10"
+dependencies = []
+
+[project.scripts]
+digimon = "aprs_watch.__main__:main"
+aprs-watch = "aprs_watch.__main__:main"
+
+[tool.setuptools.packages.find]
+include = ["aprs_watch*"]

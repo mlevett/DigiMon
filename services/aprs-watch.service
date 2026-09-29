@@ -1,0 +1,16 @@
+[Unit]
+Description=DigiMon digipeater monitor
+
+[Service]
+Type=simple
+# Replace /ABSOLUTE/PATH before installing; verify the Python and config paths.
+WorkingDirectory=/ABSOLUTE/PATH/aprs-watch
+ExecStart=/usr/bin/python3 -m aprs_watch run --config %h/.config/aprs-watch/config.json
+EnvironmentFile=-%h/.config/aprs-watch/secrets.env
+Restart=on-failure
+RestartSec=15
+TimeoutStopSec=45
+UMask=0077
+
+[Install]
+WantedBy=default.target
