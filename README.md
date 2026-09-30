@@ -4,7 +4,7 @@
 
 DigiMon is a small desktop and background app that watches one station on APRS-IS, the internet feed for the Automatic Packet Reporting System (APRS). A digipeater relays APRS packets over radio; DigiMon looks for its own packets or evidence that it has relayed someone else's.
 
-By default, it watches **MB7UPH** and alerts you after **20 minutes** without a matching packet. You can change the callsign, waiting time and notification methods. When the station is seen again, DigiMon sends a recovery notice.
+Choose the digipeater you want to monitor. DigiMon alerts you after **20 minutes** without a matching packet by default, and you can change the waiting time and notification methods. When the station is seen again, DigiMon sends a recovery notice.
 
 You can:
 
@@ -79,7 +79,7 @@ In the **Station & feed** tab:
 
 | Setting | What to enter |
 | --- | --- |
-| **Digipeater callsign** | The station you want to watch. The default is `MB7UPH`. |
+| **Digipeater callsign** | Enter the callsign of the station you want to watch, including its SSID if it uses one. |
 | **Your APRS login callsign** | Your own callsign, with a distinct SSID suffix for this app. Do not reuse the login of another APRS client connected at the same time. |
 | **Alert after (minutes)** | How long the station can go unseen before an alert. The default is `20`. |
 | **Count as seen** | Start with `both`, or choose a more specific match mode below. |
@@ -87,7 +87,7 @@ In the **Station & feed** tab:
 | **Repeat alert (minutes; 0 = off)** | Leave `0` for one absence alert per incident, or set a reminder interval. |
 | **Feed failure alert (minutes)** | How long a disconnected feed can remain unavailable before a separate alert. The default is `5`. |
 
-The login starts blank intentionally. DigiMon uses a receive-only login (`pass -1`); there is no APRS passcode to enter.
+Both callsign fields start blank so you can enter your digipeater and your own login. DigiMon uses a receive-only login (`pass -1`); there is no APRS passcode to enter.
 
 ### 4. Test your alerts and start
 
@@ -208,7 +208,7 @@ If you have not saved settings through the GUI, create a configuration first:
 python3 -m aprs_watch init
 ```
 
-This prints the new file's location. Edit it to set your login callsign and notification channels before continuing. The command refuses to overwrite an existing configuration. [config.example.json](config.example.json) shows all supported settings; its blank login must also be filled in before use. On a headless machine, set `desktop` to `false` and configure email and/or a webhook.
+This prints the new file's location. Edit it to set the digipeater callsign, your APRS login callsign and notification channels before continuing. The command refuses to overwrite an existing configuration. [config.example.json](config.example.json) shows all supported settings; both blank callsign fields must be filled in before use. On a headless machine, set `desktop` to `false` and configure email and/or a webhook.
 
 ```sh
 python3 -m aprs_watch test-alert
@@ -359,6 +359,7 @@ The app is named **DigiMon**, while the Python module (`aprs_watch`), configurat
 | `py` or `python3` is not found | Check that Python 3.10+ is installed and available in your terminal. On Windows, try `python` if `py` is unavailable. |
 | `No module named aprs_watch` | Run the command from the extracted project folder containing `aprs_watch`. |
 | Tk / `tkinter` is missing | Install Python's Tk support. Check with `python3 -m tkinter` (Windows: `py -m tkinter`). A headless system can use `run` without Tk. |
+| “Enter a valid callsign” | Fill in **Digipeater callsign** with the station you want to monitor. |
 | “Enter a valid login” | Fill in **Your APRS login callsign**. The default and example configurations intentionally leave it blank. |
 | **Observing** or “Never observed” | The app is waiting for matching traffic. Check the target callsign, SSID and match mode. It does not retrieve past packets. |
 | **Feed unavailable** | Check internet access and the configured APRS-IS host/port. DigiMon retries automatically; **Activity** and `monitor.log` show connection errors. |

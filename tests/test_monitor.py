@@ -17,6 +17,7 @@ from aprs_watch.runtime import Worker, InstanceLock, is_running, load_state
 
 def config(**overrides):
     data = copy.deepcopy(DEFAULT)
+    data["callsign"] = "MB7UPH"  # Explicit test station, not an app default.
     data.update(login="G0ABC-W", desktop=False, **overrides)
     return validate(data)
 

@@ -5,7 +5,7 @@ import re
 from pathlib import Path
 
 DEFAULT = {
-    "callsign": "MB7UPH", "login": "", "timeout_minutes": 20,
+    "callsign": "", "login": "", "timeout_minutes": 20,
     "match": "both", "host": "rotate.aprs2.net", "port": 14580,
     "feed_timeout_seconds": 120, "feed_alert_minutes": 5,
     "repeat_minutes": 0,

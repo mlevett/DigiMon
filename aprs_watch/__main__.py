@@ -34,7 +34,7 @@ def main():
             if args.config.exists():
                 raise ValueError(f"Configuration already exists: {args.config}")
             write_json(args.config, DEFAULT)
-            print(f"Created {args.config}. Set your APRS login callsign and notification channels before starting.")
+            print(f"Created {args.config}. Set the digipeater callsign, your APRS login callsign and notification channels before starting.")
         elif args.command == "status":
             data = load_state(folder)
             data["running"] = is_running(folder)

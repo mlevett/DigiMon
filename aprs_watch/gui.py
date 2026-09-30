@@ -47,7 +47,7 @@ class App:
         card.grid(row=3, column=0, sticky="ew", pady=20)
         self.status = tk.Label(card, text="●  Ready to monitor", bg=PANEL, fg=ACCENT, font=("Arial", 20, "bold"))
         self.status.pack(anchor="w")
-        self.detail = tk.Label(card, text="Enter your APRS login callsign below, then start monitoring.", bg=PANEL, fg=MUTED, font=("Arial", 10), anchor="w", justify="left")
+        self.detail = tk.Label(card, text="Enter the digipeater callsign and your APRS login callsign below, then start monitoring.", bg=PANEL, fg=MUTED, font=("Arial", 10), anchor="w", justify="left")
         self.detail.pack(anchor="w", pady=(8, 0))
         notebook = ttk.Notebook(frame)
         notebook.grid(row=4, column=0, sticky="nsew")
