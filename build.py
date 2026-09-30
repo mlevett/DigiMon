@@ -8,8 +8,8 @@ def main():
     destination = root / "dist" / "DigiMon.pyz"
     destination.parent.mkdir(exist_ok=True)
     with ZipFile(destination, "w", ZIP_DEFLATED) as archive:
-        archive.writestr("__main__.py", "from aprs_watch.__main__ import main\nraise SystemExit(main())\n")
-        for source in sorted((root / "aprs_watch").glob("*.py")):
+        archive.writestr("__main__.py", "from digimon.__main__ import main\nraise SystemExit(main())\n")
+        for source in sorted((root / "digimon").glob("*.py")):
             archive.write(source, source.relative_to(root))
     print(f"Built {destination}")
 

@@ -13,10 +13,18 @@ from .runtime import Worker, is_running, load_state
 
 def default_home():
     if sys.platform == "win32":
-        return Path(os.environ.get("LOCALAPPDATA", Path.home())) / "APRSWatch"
-    if sys.platform == "darwin":
-        return Path.home() / "Library" / "Application Support" / "APRSWatch"
-    return Path(os.environ.get("XDG_CONFIG_HOME", Path.home() / ".config")) / "aprs-watch"
+        parent = Path(os.environ.get("LOCALAPPDATA", Path.home()))
+        current, legacy = parent / "DigiMon", parent / "APRSWatch"
+    elif sys.platform == "darwin":
+        parent = Path.home() / "Library" / "Application Support"
+        current, legacy = parent / "DigiMon", parent / "APRSWatch"
+    else:
+        parent = Path(os.environ.get("XDG_CONFIG_HOME", Path.home() / ".config"))
+        current, legacy = parent / "digimon", parent / "aprs-watch"
+    # Keep existing settings, incident state and locking together on upgrades.
+    if not (current / "config.json").exists() and (legacy / "config.json").is_file():
+        return legacy
+    return current
 
 
 def main():

@@ -4,9 +4,9 @@ Description=DigiMon digipeater monitor
 [Service]
 Type=simple
 # Replace /ABSOLUTE/PATH before installing; verify the Python and config paths.
-WorkingDirectory=/ABSOLUTE/PATH/aprs-watch
-ExecStart=/usr/bin/python3 -m aprs_watch run --config %h/.config/aprs-watch/config.json
-EnvironmentFile=-%h/.config/aprs-watch/secrets.env
+WorkingDirectory=/ABSOLUTE/PATH/DigiMon
+ExecStart=/usr/bin/python3 -m digimon run --config %h/.config/digimon/config.json
+EnvironmentFile=-%h/.config/digimon/secrets.env
 Restart=on-failure
 RestartSec=15
 TimeoutStopSec=45

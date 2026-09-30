@@ -32,7 +32,7 @@ DigiMon is receive-only: it does not transmit APRS packets or control your radio
 
 ### 1. Download and open the app folder
 
-Download and extract this project, or clone the repository. Open a terminal in the folder containing `README.md` and the `aprs_watch` directory. The commands below run from that folder.
+Download and extract this project, or clone the repository. Open a terminal in the folder containing `README.md` and the `digimon` directory. The commands below run from that folder.
 
 DigiMon needs **Python 3.10 or later**. Its monitoring engine uses only Python's standard library, so no extra Python packages are needed to run from source. The desktop window also needs **Tk**, Python's GUI toolkit.
 
@@ -44,7 +44,7 @@ Install Python 3.10 or later with Tcl/Tk support. In PowerShell, run:
 
 ```powershell
 py --version
-py -m aprs_watch
+py -m digimon
 ```
 
 If your installation provides `python` instead of `py`, use `python` in these commands.
@@ -56,7 +56,7 @@ On Debian or Ubuntu, install Python, Tk and the desktop notification helper:
 ```sh
 sudo apt install python3 python3-tk libnotify-bin
 python3 --version
-python3 -m aprs_watch
+python3 -m digimon
 ```
 
 On other distributions, install the equivalent packages. Tk is only needed for the desktop window; `notify-send` is only needed for desktop alerts.
@@ -68,7 +68,7 @@ Install Python 3.10 or later with Tk support, then run:
 ```sh
 python3 --version
 python3 -m tkinter
-python3 -m aprs_watch
+python3 -m digimon
 ```
 
 The Tk command opens a small test window. Close it before continuing.
@@ -158,7 +158,7 @@ Enter your provider's SMTP settings:
 | SMTP host | Your outgoing mail server. |
 | SMTP port / encryption | Commonly `587` with `starttls`, or `465` with `ssl`; use your provider's settings. |
 | SMTP username | The account used to send mail. |
-| Password environment variable | The **name** of the variable holding your password, not the password itself. Default: `APRS_WATCH_SMTP_PASSWORD`. |
+| Password environment variable | The **name** of the variable holding your password, not the password itself. Default: `DIGIMON_SMTP_PASSWORD`. |
 | From address | The sender address allowed by your provider. |
 | To addresses | One or more recipients, separated by commas. |
 
@@ -170,16 +170,16 @@ Set the password before launching DigiMon from the same terminal. These examples
 
 ```powershell
 $secret = Read-Host 'SMTP app password' -AsSecureString
-$env:APRS_WATCH_SMTP_PASSWORD = [System.Net.NetworkCredential]::new('', $secret).Password
-py -m aprs_watch
+$env:DIGIMON_SMTP_PASSWORD = [System.Net.NetworkCredential]::new('', $secret).Password
+py -m digimon
 ```
 
 **Linux or macOS, using Bash:**
 
 ```bash
-read -r -s -p 'SMTP app password: ' APRS_WATCH_SMTP_PASSWORD
-export APRS_WATCH_SMTP_PASSWORD
-python3 -m aprs_watch
+read -r -s -p 'SMTP app password: ' DIGIMON_SMTP_PASSWORD
+export DIGIMON_SMTP_PASSWORD
+python3 -m digimon
 ```
 
 Type the password and press Enter when prompted. On macOS, run `bash` first if your terminal uses another shell. These variables apply to this shell session and its child processes; a background service needs its own password configuration.
@@ -205,14 +205,14 @@ Use command-line mode for a headless computer or a process managed by your opera
 If you have not saved settings through the GUI, create a configuration first:
 
 ```sh
-python3 -m aprs_watch init
+python3 -m digimon init
 ```
 
 This prints the new file's location. Edit it to set the digipeater callsign, your APRS login callsign and notification channels before continuing. The command refuses to overwrite an existing configuration. [config.example.json](config.example.json) shows all supported settings; both blank callsign fields must be filled in before use. On a headless machine, set `desktop` to `false` and configure email and/or a webhook.
 
 ```sh
-python3 -m aprs_watch test-alert
-python3 -m aprs_watch run
+python3 -m digimon test-alert
+python3 -m digimon run
 ```
 
 `run` keeps running in the terminal until you press Ctrl+C or it receives a termination signal. It does not install a service or detach itself into the background.
@@ -220,7 +220,7 @@ python3 -m aprs_watch run
 From another terminal, check the saved status:
 
 ```sh
-python3 -m aprs_watch status
+python3 -m digimon status
 ```
 
 | Command | Purpose |
@@ -234,7 +234,7 @@ python3 -m aprs_watch status
 All commands accept `--config` and `--data-dir`, for example:
 
 ```sh
-python3 -m aprs_watch run --config /absolute/path/config.json --data-dir /absolute/path/data
+python3 -m digimon run --config /absolute/path/config.json --data-dir /absolute/path/data
 ```
 
 Use the same configuration and data directory when switching between the GUI and a service. The GUI can display a running service's status, but its **Stop** button only stops a monitor it started itself. Stop the service before editing settings, then restart it to load your changes.
@@ -247,15 +247,15 @@ The templates in [services](services) use the extracted source folder. Replace t
 
 ### Linux: systemd user service
 
-1. Create `~/.config/systemd/user/` if needed, and copy [services/aprs-watch.service](services/aprs-watch.service) into it.
-2. Edit `WorkingDirectory` to your app folder. Check `ExecStart`: Python must be 3.10 or later, and the supplied configuration path assumes `~/.config/aprs-watch/config.json`. Quote paths containing spaces.
-3. For email, create `~/.config/aprs-watch/secrets.env` containing `APRS_WATCH_SMTP_PASSWORD=your-app-password`. Protect it with `chmod 600 ~/.config/aprs-watch/secrets.env`. Use systemd environment-file quoting for special characters.
+1. Create `~/.config/systemd/user/` if needed, and copy [services/digimon.service](services/digimon.service) into it.
+2. Edit `WorkingDirectory` to your app folder. Check `ExecStart`: Python must be 3.10 or later, and the supplied configuration path assumes `~/.config/digimon/config.json`. Quote paths containing spaces.
+3. For email, create `~/.config/digimon/secrets.env` containing `DIGIMON_SMTP_PASSWORD=your-app-password`. Protect it with `chmod 600 ~/.config/digimon/secrets.env`. Use systemd environment-file quoting for special characters.
 4. Enable and start the service:
 
 ```sh
 systemctl --user daemon-reload
-systemctl --user enable --now aprs-watch.service
-systemctl --user status aprs-watch.service
+systemctl --user enable --now digimon.service
+systemctl --user status digimon.service
 ```
 
 To keep it running after logout and start the user manager at boot:
@@ -270,35 +270,35 @@ Useful service commands:
 
 ```sh
 # Stop before changing app settings
-systemctl --user stop aprs-watch.service
+systemctl --user stop digimon.service
 
 # Start again or reload changed app settings
-systemctl --user restart aprs-watch.service
+systemctl --user restart digimon.service
 
 # Stop and disable automatic startup
-systemctl --user disable --now aprs-watch.service
+systemctl --user disable --now digimon.service
 
 # Inspect service-level errors
-journalctl --user -u aprs-watch.service
+journalctl --user -u digimon.service
 ```
 
 ### macOS: launchd agent
 
 For a background process that starts when you log in:
 
-1. Edit every placeholder in [services/org.aprswatch.monitor.plist](services/org.aprswatch.monitor.plist), including the absolute Python executable, application folder and configuration path.
+1. Edit every placeholder in [services/org.digimon.monitor.plist](services/org.digimon.monitor.plist), including the absolute Python executable, application folder and configuration path.
 2. Copy it into `~/Library/LaunchAgents/`, creating the directory if necessary.
 3. For email, supply the password variable through a protected `EnvironmentVariables` dictionary in the plist. Jobs do not automatically inherit your terminal's environment.
 4. Load it:
 
 ```sh
-launchctl bootstrap "gui/$(id -u)" "$HOME/Library/LaunchAgents/org.aprswatch.monitor.plist"
+launchctl bootstrap "gui/$(id -u)" "$HOME/Library/LaunchAgents/org.digimon.monitor.plist"
 ```
 
 Stop and unload it before editing settings:
 
 ```sh
-launchctl bootout "gui/$(id -u)" "$HOME/Library/LaunchAgents/org.aprswatch.monitor.plist"
+launchctl bootout "gui/$(id -u)" "$HOME/Library/LaunchAgents/org.digimon.monitor.plist"
 ```
 
 Run the bootstrap command again to start it. This LaunchAgent starts at login. Pre-login monitoring needs an administrator-configured LaunchDaemon with an explicit `UserName`, accessible paths and email/webhook notifications.
@@ -307,30 +307,30 @@ Run the bootstrap command again to start it. This LaunchAgent starts at login. P
 
 The service template uses the third-party [WinSW service wrapper](https://github.com/winsw/winsw), which is not bundled with DigiMon.
 
-1. Put the app in `C:\APRSWatch\app` and your tested configuration at `C:\APRSWatch\config.json`. Disable desktop notifications in that configuration.
-2. Edit the Python executable path in [services/APRSWatch.xml](services/APRSWatch.xml). Place that XML and a compatible WinSW executable together in `C:\APRSWatch`, named `APRSWatch.xml` and `APRSWatch.exe`.
-3. For email, supply the password to the service environment, for example with a protected WinSW `<env name="APRS_WATCH_SMTP_PASSWORD" value="..."/>` setting. XML-escape special characters and restrict access to credential files.
-4. Open PowerShell as Administrator in `C:\APRSWatch` and run:
+1. Put the app in `C:\DigiMon\app` and your tested configuration at `C:\DigiMon\config.json`. Disable desktop notifications in that configuration.
+2. Edit the Python executable path in [services/DigiMon.xml](services/DigiMon.xml). Place that XML and a compatible WinSW executable together in `C:\DigiMon`, named `DigiMon.xml` and `DigiMon.exe`.
+3. For email, supply the password to the service environment, for example with a protected WinSW `<env name="DIGIMON_SMTP_PASSWORD" value="..."/>` setting. XML-escape special characters and restrict access to credential files.
+4. Open PowerShell as Administrator in `C:\DigiMon` and run:
 
 ```powershell
-.\APRSWatch.exe install
-.\APRSWatch.exe start
+.\DigiMon.exe install
+.\DigiMon.exe start
 ```
 
-Ensure the service account can read the app and write `C:\APRSWatch\data`. To view it in the GUI, run this from the app folder with an account that can access those files:
+Ensure the service account can read the app and write `C:\DigiMon\data`. To view it in the GUI, run this from the app folder with an account that can access those files:
 
 ```powershell
-py -m aprs_watch gui --config C:\APRSWatch\config.json --data-dir C:\APRSWatch\data
+py -m digimon gui --config C:\DigiMon\config.json --data-dir C:\DigiMon\data
 ```
 
 Stop it before changing settings, then start it again:
 
 ```powershell
-.\APRSWatch.exe stop
-.\APRSWatch.exe start
+.\DigiMon.exe stop
+.\DigiMon.exe start
 ```
 
-To remove the service, stop it and run `.\APRSWatch.exe uninstall` from the Administrator PowerShell window.
+To remove the service, stop it and run `.\DigiMon.exe uninstall` from the Administrator PowerShell window.
 
 ## Settings and saved data
 
@@ -338,9 +338,9 @@ Default configuration locations:
 
 | Platform | Configuration file |
 | --- | --- |
-| Windows | `%LOCALAPPDATA%\APRSWatch\config.json` |
-| Linux | `~/.config/aprs-watch/config.json` (honours `XDG_CONFIG_HOME`) |
-| macOS | `~/Library/Application Support/APRSWatch/config.json` |
+| Windows | `%LOCALAPPDATA%\DigiMon\config.json` |
+| Linux | `~/.config/digimon/config.json` (honours `XDG_CONFIG_HOME`) |
+| macOS | `~/Library/Application Support/DigiMon/config.json` |
 
 By default, a `data` directory beside the configuration contains:
 
@@ -350,14 +350,30 @@ By default, a `data` directory beside the configuration contains:
 
 Keep the same data directory to preserve monitoring history when switching between the desktop app and a service. Stop monitoring before moving files or editing configuration. Newly saved configuration/state files use owner-only permissions on POSIX systems; on Windows, use an account-private folder with suitable filesystem permissions.
 
-The app is named **DigiMon**, while the Python module (`aprs_watch`), configuration folders and service identifiers retain their earlier names so existing setups continue to work.
+The app is **DigiMon**. Its Python module and terminal command use the lowercase spelling `digimon`.
+
+### Upgrading from the earlier name
+
+Launch the updated app with `python3 -m digimon` (Windows: `py -m digimon`). If you installed the earlier package with pip, uninstall `digimon-aprs`, then install this version from the project folder with `python3 -m pip install .`. The installed terminal command is `digimon`.
+
+If there is no configuration in the new DigiMon location, the app automatically uses an existing configuration in the old `aprs-watch` (Linux) or `APRSWatch` (Windows/macOS) folder. It uses the same data folder there, preserving last-seen information and open incidents. An explicit `--config` path takes precedence. Saved email settings still use whichever password environment variable they name; new configurations use `DIGIMON_SMTP_PASSWORD`.
+
+To move everything to the new location, stop the monitor and any old service first, then move the old configuration folder, including `data` and any `secrets.env`, to the DigiMon location in the table above. If a DigiMon configuration already exists, back up both folders and choose which settings to keep rather than overwriting them. Preserve the privacy of credential files and update any custom configuration/data paths.
+
+Existing services are not renamed automatically. Stop and disable/remove the old service before installing the new template:
+
+- **Linux:** disable `aprs-watch.service` with `systemctl --user disable --now aprs-watch.service`, then follow the `digimon.service` instructions above.
+- **macOS:** unload `org.aprswatch.monitor.plist` using `launchctl bootout`, remove the old plist from `~/Library/LaunchAgents/`, then install `org.digimon.monitor.plist`.
+- **Windows:** use the old WinSW wrapper to stop and uninstall the `APRSWatch` service, then install the `DigiMon` service.
+
+The new templates use the new configuration locations. Move your existing settings there first or edit the template to point at the existing configuration and data. If you keep a saved email setting that names `APRS_WATCH_SMTP_PASSWORD`, supply that variable to the service too. Do not run both the old and new services.
 
 ## Troubleshooting
 
 | Problem | What to check |
 | --- | --- |
 | `py` or `python3` is not found | Check that Python 3.10+ is installed and available in your terminal. On Windows, try `python` if `py` is unavailable. |
-| `No module named aprs_watch` | Run the command from the extracted project folder containing `aprs_watch`. |
+| `No module named digimon` | Run the command from the extracted project folder containing `digimon`. |
 | Tk / `tkinter` is missing | Install Python's Tk support. Check with `python3 -m tkinter` (Windows: `py -m tkinter`). A headless system can use `run` without Tk. |
 | “Enter a valid callsign” | Fill in **Digipeater callsign** with the station you want to monitor. |
 | “Enter a valid login” | Fill in **Your APRS login callsign**. The default and example configurations intentionally leave it blank. |
@@ -389,7 +405,7 @@ python3 build.py
 python3 dist/DigiMon.pyz
 ```
 
-The build creates `dist/DigiMon.pyz`, which you can launch from any folder using its path. On Windows, use `py build.py` and `py dist\DigiMon.pyz`. The archive supports the same commands and options as `python3 -m aprs_watch`.
+The build creates `dist/DigiMon.pyz`, which you can launch from any folder using its path. On Windows, use `py build.py` and `py dist\DigiMon.pyz`. The archive supports the same commands and options as `python3 -m digimon`.
 
 Python and the relevant GUI/notification components are still required. This archive is not a standalone executable or signed installer.
 
@@ -397,11 +413,11 @@ Python and the relevant GUI/notification components are still required. This arc
 
 | File | Responsibility |
 | --- | --- |
-| `aprs_watch/core.py` | Packet matching and alert state. |
-| `aprs_watch/runtime.py` | APRS connection, reconnects, saved status, locking and logs. |
-| `aprs_watch/notify.py` | Desktop, email and webhook delivery. |
-| `aprs_watch/gui.py` | Desktop interface. |
-| `aprs_watch/config.py` | Defaults and settings validation. |
-| `aprs_watch/__main__.py` | Command-line entry point. |
+| `digimon/core.py` | Packet matching and alert state. |
+| `digimon/runtime.py` | APRS connection, reconnects, saved status, locking and logs. |
+| `digimon/notify.py` | Desktop, email and webhook delivery. |
+| `digimon/gui.py` | Desktop interface. |
+| `digimon/config.py` | Defaults and settings validation. |
+| `digimon/__main__.py` | Command-line entry point. |
 | `services/` | Background service templates. |
 | `tests/` | Automated tests. |

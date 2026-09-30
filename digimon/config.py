@@ -12,7 +12,7 @@ DEFAULT = {
     "desktop": True,
     "webhook": {"enabled": False, "url": "", "format": "discord"},
     "email": {"enabled": False, "host": "", "port": 587, "security": "starttls",
-              "username": "", "password_env": "APRS_WATCH_SMTP_PASSWORD",
+              "username": "", "password_env": "DIGIMON_SMTP_PASSWORD",
               "from": "", "to": ""},
 }
 

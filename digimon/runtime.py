@@ -66,7 +66,7 @@ class Worker:
         self.thread = None
         self.error = None
         self.events, self.messages = [], []
-        self.logger = logging.getLogger(f"aprs_watch.{id(self)}")
+        self.logger = logging.getLogger(f"digimon.{id(self)}")
         self.logger.setLevel(logging.INFO)
         self.last_write = 0
 

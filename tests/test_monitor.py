@@ -9,10 +9,10 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch, MagicMock
 
-from aprs_watch.config import DEFAULT, validate, write_json
-from aprs_watch.core import Monitor, evidence
-from aprs_watch.notify import channels, deliver, Notifier
-from aprs_watch.runtime import Worker, InstanceLock, is_running, load_state
+from digimon.config import DEFAULT, validate, write_json
+from digimon.core import Monitor, evidence
+from digimon.notify import channels, deliver, Notifier
+from digimon.runtime import Worker, InstanceLock, is_running, load_state
 
 
 def config(**overrides):
@@ -139,7 +139,7 @@ class ConfigAndNotificationTests(unittest.TestCase):
     def test_smtp_tls_and_password_environment(self):
         cfg = config()
         cfg["email"].update(host="smtp.invalid", username="operator", **{"from": "a@example.com", "to": "b@example.com"})
-        with patch.dict(os.environ, APRS_WATCH_SMTP_PASSWORD="secret"), patch("smtplib.SMTP") as constructor:
+        with patch.dict(os.environ, DIGIMON_SMTP_PASSWORD="secret"), patch("smtplib.SMTP") as constructor:
             smtp = constructor.return_value.__enter__.return_value
             smtp.send_message.return_value = {}
             deliver("email", cfg, {"title": "Test", "message": "Body"})
@@ -157,7 +157,7 @@ class ConfigAndNotificationTests(unittest.TestCase):
             if channel == "email":
                 raise OSError("secret must never appear")
         notifier = Notifier(cfg, reports.append)
-        with patch("aprs_watch.notify.deliver", fake):
+        with patch("digimon.notify.deliver", fake):
             notifier.thread.start()
             notifier.submit({"title": "Test"})
             notifier.jobs.join()

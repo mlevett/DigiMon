@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0"><dict>
-  <key>Label</key><string>org.aprswatch.monitor</string>
+  <key>Label</key><string>org.digimon.monitor</string>
   <key>ProgramArguments</key><array>
     <string>/ABSOLUTE/PATH/python3</string>
-    <string>-m</string><string>aprs_watch</string><string>run</string>
-    <string>--config</string><string>/Users/YOU/Library/Application Support/APRSWatch/config.json</string>
+    <string>-m</string><string>digimon</string><string>run</string>
+    <string>--config</string><string>/Users/YOU/Library/Application Support/DigiMon/config.json</string>
   </array>
-  <key>WorkingDirectory</key><string>/ABSOLUTE/PATH/aprs-watch</string>
+  <key>WorkingDirectory</key><string>/ABSOLUTE/PATH/DigiMon</string>
   <key>RunAtLoad</key><true/>
   <key>KeepAlive</key><true/>
   <key>ThrottleInterval</key><integer>15</integer>

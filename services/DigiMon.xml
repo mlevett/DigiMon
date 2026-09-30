@@ -1,10 +1,10 @@
 <service>
-  <id>APRSWatch</id>
+  <id>DigiMon</id>
   <name>DigiMon</name>
   <description>Receive-only APRS digipeater monitor</description>
   <executable>C:\PATH\TO\python.exe</executable>
-  <arguments>-m aprs_watch run --config "C:\APRSWatch\config.json" --data-dir "C:\APRSWatch\data"</arguments>
-  <workingdirectory>C:\APRSWatch\app</workingdirectory>
+  <arguments>-m digimon run --config "C:\DigiMon\config.json" --data-dir "C:\DigiMon\data"</arguments>
+  <workingdirectory>C:\DigiMon\app</workingdirectory>
   <startmode>Automatic</startmode>
   <stoptimeout>45sec</stoptimeout>
   <onfailure action="restart" delay="15 sec"/>
